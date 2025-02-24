@@ -1,6 +1,7 @@
 # tuto
 
-https://grafikart.fr/tutoriels/component-vuejs-2230
+https://grafikart.fr/tutoriels/provide-inject-vuejs-2237
+
 https://vuejs.org/guide/quick-start.html
 
 # vuejs
