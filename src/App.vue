@@ -1,64 +1,55 @@
 <template>
-  <form role="group" @submit.prevent="addMovie">
-    <input type="text" v-model="movie" />
-    <button :disabled="movie.length === 0">Ajouter</button>
-  </form>
-  <TransitionGroup name="list" tag="ul">
-    <li v-for="movie in movies" :key="movie">
-      {{ movie }}
-      <button class="secondary" @click="removeMovie(movie)">x</button>
-    </li>
-  </TransitionGroup>
-  <button @click="randomize">Réorganiser</button>
+  <p :class="$style.text">text</p>
+  <select name="" id="" v-model="color">
+    <option value="red">Rouge</option>
+    <option value="green">Vert</option>
+    <option value="blue">Bleu</option>
+  </select>
+  <p class="text2">text</p>
+  <p class="text3">text</p>
 </template>
 
 <script setup>
-import { ref } from "vue";
-import { shuffleArray } from "./functions/array";
+import { ref, useCssModule } from "vue";
 
-const showSpoiler = ref(false);
-const movies = ref([
-  "Les Évadés",
-  "Le Parrain",
-  "The Dark Knight : Le Chevalier Noir",
-  "Pulp Fiction",
-  "Forrest Gump",
-  "Inception",
-]);
+console.log(useCssModule());
 
-const movie = ref("");
-const addMovie = () => {
-  movies.value = [movie.value, ...movies.value];
-  movie.value = "";
-};
-const removeMovie = (movie) => {
-  movies.value = movies.value.filter((m) => m !== movie);
-};
-const toggleSpoiler = () => (showSpoiler.value = !showSpoiler.value);
-const randomize = () => {
-  movies.value = shuffleArray(movies.value);
-};
+const color = ref("red");
 </script>
 
-<style>
-.spoiler {
-  padding: 1rem;
-  border: 1px solid #ffffff58;
+<!--
+- scoped : permet d'appliquer ce style seulement pour ce cmpt, ajoute un attribut data- dans les tags associées.
+- deep : permet d'affecter les cmpt en profondeur malgré le scoped, dans ce cas l'attribut data- est sur .app.
+- global : la règle devient globale, l'attribut data- n'est plus injecté.
+- on peut aussi créer pls balises <style> pour scoped et non scoped.
+- slotted : permet de gérer les class passées dans des slots depuis le cmpt parent (sans cmpt intermédiaire).
+- v-bind : bind une var js avec le CSS, bien plus simple qu'en React avec les styled-cmpts.
+- lang : permet d'utiliser Sass à condition d'installer la dep (npm i -D sass-loader sass).
+-->
+<style scoped lang="scss">
+@use "sass:color";
+.app :deep(h1) {
+  color: red;
 }
-
-.list-move,
-.list-enter-active,
-.list-leave-active {
-  transition: all 0.5s ease;
+:global(.app h1) {
+  color: red;
 }
-
-.list-leave-active {
-  position: absolute;
+:slotted(.text) {
+  color: red;
 }
+.text2 {
+  color: v-bind(color);
+}
+.text3 {
+  color: color.scale(red, $alpha: -40%);
+}
+</style>
 
-.list-enter-from,
-.list-leave-to {
-  opacity: 0;
-  transform: translateX(30px);
+<!--
+- CSS Modules
+-->
+<style module>
+.text {
+  color: red;
 }
 </style>
